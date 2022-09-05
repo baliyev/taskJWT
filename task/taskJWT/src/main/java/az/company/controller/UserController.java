@@ -16,13 +16,11 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity getStudents(){
-        String s = "";
         return ResponseEntity.ok().body(studentService.getStudents());
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity getStudent(@PathVariable Integer id){
-        String s = "";
         return ResponseEntity.ok().body(studentService.getStudent(id));
     }
 

@@ -1,8 +1,8 @@
 package az.company.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import javax.persistence.*;
-
 
 @Data
 @Entity
@@ -11,13 +11,13 @@ public class PhoneNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "phone_id")
     private Integer phoneId;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    private Address address;
-
+    @OneToOne(mappedBy = "phoneNumber")
+    @JsonIgnore
+    private Address addressList;
 }

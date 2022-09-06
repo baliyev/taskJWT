@@ -1,6 +1,7 @@
 package az.company.controller;
 
 import az.company.dto.LoginUserDto;
+import az.company.dto.StudentDto;
 import az.company.entity.Student;
 import az.company.security.JwtTokenProvider;
 import az.company.security.SecurityConfig;
@@ -42,16 +43,10 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity createStudent(@RequestBody Student student){
+    public ResponseEntity createStudent(@RequestBody StudentDto student){
         student.setPassword(passwordEncoder.encode(student.getPassword()));
-        if (studentService.createStudent(student)){
-            return ResponseEntity.ok("The user has been successfully created.");
-        }
-
-
-        return ResponseEntity.status(HttpStatus.CONFLICT.value())
-                .body("The user could not be created." +
-                        "\nThis email address has already been registered.");
+        studentService.createStudent(student);
+        return  ResponseEntity.ok().build();
     }
 
 

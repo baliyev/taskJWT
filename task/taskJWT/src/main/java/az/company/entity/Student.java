@@ -8,6 +8,19 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "abb_students")
+@NamedEntityGraph(
+        name = "students-with-address-phone",
+        attributeNodes = {
+                @NamedAttributeNode(value = "addressList", subgraph = "phoneNumber"),
+        },
+
+        subgraphs = {@NamedSubgraph(
+                name = "phoneNumber",
+                attributeNodes = {
+                        @NamedAttributeNode("phoneNumber")
+                }
+        )}
+)
 public class Student {
 
     @Id

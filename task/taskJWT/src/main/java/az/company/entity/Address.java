@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 
@@ -26,6 +27,6 @@ public class Address {
     private Student student;
 
     @JoinColumn(name = "phone_id", referencedColumnName = "phone_id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false,cascade = CascadeType.ALL)
     private PhoneNumber phoneNumber;
 }

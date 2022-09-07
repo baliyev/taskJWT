@@ -20,28 +20,23 @@ import java.util.List;
 public class UserController {
     private final IStudentService studentService;
     private final EntityManager entityManager;
-    @GetMapping("/users")
-    public ResponseEntity getStudents(){
-        return ResponseEntity.ok().body(studentService.getStudents());
-    }
+
 
     @GetMapping("/users/{id}")
     public ResponseEntity getStudent(@PathVariable Integer id){
         return ResponseEntity.ok().body(studentService.getStudent(id));
     }
-
-    @GetMapping("/users/v1")
+    @GetMapping("/users")
+    public ResponseEntity getStudents(){
+        return ResponseEntity.ok().body(studentService.getStudents());
+    }
+    @GetMapping("/users/v2")
     public ResponseEntity getStudentsByNativeQuery(){
         return ResponseEntity.ok().body(studentService.getStudentsByNativeQuery());
     }
-
-    @GetMapping("/users/v2")
+    @GetMapping("/users/v3")
     public ResponseEntity getStudentsByHQL(){
         return ResponseEntity.ok().body(studentService.getStudentsByHQL());
     }
 
-    @GetMapping("/users/v3/{name}")
-    public ResponseEntity getStudentsByEntityGraph(@PathVariable("name") String name){
-        return ResponseEntity.ok().body(studentService.getStudentByEntityGraph(name));
-    }
 }

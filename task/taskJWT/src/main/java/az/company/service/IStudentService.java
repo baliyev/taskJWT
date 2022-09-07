@@ -12,5 +12,4 @@ public interface IStudentService {
     public void createStudent(StudentDto studentDto);
     public List<Student> getStudentsByNativeQuery();
     public List<Student> getStudentsByHQL();
-    public List<Student> getStudentByEntityGraph(String name);
 }

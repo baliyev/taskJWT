@@ -4,9 +4,13 @@ import az.company.dto.StudentDto;
 import az.company.entity.Address;
 import az.company.entity.PhoneNumber;
 import az.company.entity.Student;
+import az.company.mapper.SourceDestinationMapper;
+import az.company.mapper.SourceDestinationMapperImpl;
 import az.company.repository.StudentRepsitory;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.*;
+import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class StudentService implements IStudentService {
     private final StudentRepsitory studentRepsitory;
+    private final SourceDestinationMapper mapper;
+
     @Override
     public List<Student> getStudents(){
         return studentRepsitory.findAll();
@@ -43,27 +49,11 @@ public class StudentService implements IStudentService {
         studentRepsitory.findStudentByEmail(studentDto.getEmail()).ifPresentOrElse(_student->{
             throw new RuntimeException("This e-mail address is already in use.");
         },()->{
-            Student student = new Student();
-            student.setStudentName(studentDto.getName());
-            student.setEmail(studentDto.getEmail());
-            student.setRole(studentDto.getRole());
-            student.setPassword(studentDto.getPassword());
-            List<Address> addressList = new ArrayList<>();
-            studentDto.getAddressList().forEach(addressDto->{
-                Address address = new Address();
-                address.setAddressDescription(addressDto.getAddressDescription());
-                PhoneNumber phoneNumber = new PhoneNumber();
-                phoneNumber.setPhoneNumber(addressDto.getPhoneNumber());
-                address.setPhoneNumber(phoneNumber);
-                address.getPhoneNumber().setAddressList(address);
-                addressList.add(address);
+            Student _student = mapper.STUDENTDto2Entity(studentDto);
+            _student.getAddressList().forEach(address -> {
+                address.setStudent(_student);
             });
-            student.setAddressList(addressList);
-            student.getAddressList().forEach(address -> {
-                address.setStudent(student);
-            });
-
-            studentRepsitory.save(student);
+            studentRepsitory.save(_student);
         });
     }
     @Override
